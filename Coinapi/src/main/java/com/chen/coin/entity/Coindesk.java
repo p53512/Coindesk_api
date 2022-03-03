@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-
-
 @Entity
 @Table
 public class Coindesk {
@@ -21,7 +19,6 @@ public class Coindesk {
     Integer id;
 	
 	
-	List time;
 	@Column
 	String updated;
 	@Column
@@ -127,7 +124,6 @@ public class Coindesk {
 	public void setRate_float(String rate_float) {
 		this.rate_float = rate_float;
 	}
-	
 	
 }
 
