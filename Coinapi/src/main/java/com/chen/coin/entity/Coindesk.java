@@ -1,5 +1,7 @@
 package com.chen.coin.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,8 +21,7 @@ public class Coindesk {
     Integer id;
 	
 	
-	@Column
-	String time;
+	List time;
 	@Column
 	String updated;
 	@Column
@@ -53,12 +54,6 @@ public class Coindesk {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getTime() {
-		return time;
-	}
-	public void setTime(String time) {
-		this.time = time;
 	}
 	public String getCoinname() {
 		return coinname;
