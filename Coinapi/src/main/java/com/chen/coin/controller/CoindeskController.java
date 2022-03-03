@@ -3,10 +3,8 @@ package com.chen.coin.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.chen.coin.entity.Bpi;
 import com.chen.coin.entity.Coindesk;
+import com.chen.coin.entity.CoindeskVo;
 import com.chen.coin.service.CoindeskService;
+
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 @RestController
 public class CoindeskController {
@@ -26,8 +29,20 @@ public class CoindeskController {
 	public static JSONObject callCoindesk() throws JSONException {
 		RestTemplate restTemplate = new RestTemplate();
 		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
-		JSONObject json = new JSONObject(str);
+		JSONObject json = JSONObject.fromObject(str);
+		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
+		Bpi mapbpi= vo.getBpi();
+//		System.err.println(mapbpi.get("EUR"));
+		System.out.println(mapbpi.getEUR().getCode());
+//		for(String v : mapbpi.get("")) {
+//			System.err.println(v);
+//		Map<String, String> data = mapbpi.get(v);
+//			for(String x : data.keySet() ) {
+//				System.err.println(x);
+//			}
+//		}
 		JSONObject a = json.getJSONObject("bpi").getJSONObject("EUR");
+		
 		System.err.println(a);
 		
 		return json;
