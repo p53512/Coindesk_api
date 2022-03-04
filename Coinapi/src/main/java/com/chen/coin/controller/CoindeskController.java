@@ -31,19 +31,7 @@ public class CoindeskController {
 		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
 		JSONObject json = JSONObject.fromObject(str);
 		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
-		Bpi mapbpi= vo.getBpi();
-//		System.err.println(mapbpi.get("EUR"));
-		System.out.println(mapbpi.getEUR().getCode());
-//		for(String v : mapbpi.get("")) {
-//			System.err.println(v);
-//		Map<String, String> data = mapbpi.get(v);
-//			for(String x : data.keySet() ) {
-//				System.err.println(x);
-//			}
-//		}
-		JSONObject a = json.getJSONObject("bpi").getJSONObject("EUR");
-		
-		System.err.println(a);
+		System.err.println(vo.getBpi().getEUR().getCode());
 		
 		return json;
 	}
@@ -51,6 +39,14 @@ public class CoindeskController {
 	public static List<Coindesk> turnCoinAPi() {
 		List<Coindesk> list = new ArrayList<Coindesk>();
 		Coindesk coin = new Coindesk();
+		JSONObject json = callCoindesk();
+		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
+		List<Bpi> listbpi = new ArrayList<Bpi>();
+		vo.getBpi().getEUR().getCode();
+		vo.getBpi().getEUR();
+		vo.getBpi().getEUR();
+		
+		
 		
 		return null;
 	}
@@ -66,24 +62,27 @@ public class CoindeskController {
 		RestTemplate restTemplate = new RestTemplate();
 		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
 		JSONObject json = callCoindesk();
+		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
 		Coindesk coin = new Coindesk();
-		List list = new ArrayList();
-		
-		
-
+		coin.setCode(vo.getBpi().getEUR().getCode());
+		coin.setCodename("歐元");
 		
 		
 		
 	}
 	
+	  public void saveCoin( Coindesk coindesk) {
+			coindeskService.save(coindesk);
+		    }
+	
 	@PutMapping("/todos/{id}")
-	    public void upadteTodo( Integer id,  Coindesk coindesk) {
-		coindeskService.updateTodo(id ,coindesk);
+	    public void upadteTodo( String coin,  Coindesk coindesk) {
+		coindeskService.updateTodo(coin ,coindesk);
 	    }
 	    
 	@DeleteMapping("/todos/{id}")
-	    public void deleteTodo( Integer id) {
-		coindeskService.deleteTodo(id);
+	    public void deleteTodo( String coin) {
+		coindeskService.deleteTodo(coin);
 	    }
 
 }

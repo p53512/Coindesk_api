@@ -17,14 +17,20 @@ public class CoindeskService {
 	    }
 	 
 	 
-	 public Coindesk findById(Integer id) {
-		 Coindesk todo = coindeskDao.findById(id).get();
-		 return todo;
+	 public Coindesk findById(String coin) {
+		 Coindesk rescoin = coindeskDao.findById(coin).get();
+		 return rescoin;
 	 }
 
-	 public Coindesk updateTodo(Integer id,Coindesk coindesk) {
+	 public Coindesk save(Coindesk coin) {
+		 
+		 Coindesk rescoin =  coindeskDao.save(coin);
+		 return rescoin;
+	 }
+	 
+	 public Coindesk updateTodo(String coin,Coindesk coindesk) {
 	        try {
-	        	Coindesk resCoindesk = findById(id);
+	        	Coindesk resCoindesk = findById(coin);
 //	            Integer status = coindesk.getStatus();
 //	            resCoindesk.setStatus(stastus);
 	            return coindeskDao.save(resCoindesk);
@@ -35,10 +41,10 @@ public class CoindeskService {
 	    }
 	 
 
-	 public Boolean deleteTodo(Integer id) {
+	 public Boolean deleteTodo(String coin) {
 	     try {
-	    	 Coindesk resCoindesk = findById(id);
-	    	 coindeskDao.deleteById(id);
+	    	 Coindesk resCoindesk = findById(coin);
+	    	 coindeskDao.deleteById(coin);
 	            return true;
 	        } catch (Exception exception) {
 	            return false;

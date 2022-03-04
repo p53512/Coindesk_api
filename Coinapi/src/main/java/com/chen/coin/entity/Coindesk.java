@@ -13,92 +13,109 @@ import javax.persistence.Table;
 @Table
 public class Coindesk {
 	
+	
+	
+//	@Column
+//	String updated;
+//	@Column
+//	String updatedISO;
+//	@Column
+//	String updateduk;
+//	//中文
+//	@Column
+//	String coinname;
+//	@Column
+//	String coin;
+//	@Column
+//	String exchangerate;
+//	@Column
+//	String discllaimer;
+//	@Column
+//	String chartName;
+//	@Column
+//	String description;
+//	@Column
+//	String symbol;
+//	@Column
+//	String rate;
+//	@Column
+//	String rate_float;
+	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-	
-	
+	String code;
 	@Column
-	String updated;
-	@Column
-	String updatedISO;
-	@Column
-	String updateduk;
-	//中文
-	@Column
-	String coinname;
-	@Column
-	String coin;
-	@Column
-	String exchangerate;
-	@Column
-	String discllaimer;
-	@Column
-	String chartName;
-	@Column
-	String description;
+	String codename;
 	@Column
 	String symbol;
 	@Column
 	String rate;
 	@Column
+	String description;
+	@Column
 	String rate_float;
 	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getCodename() {
+		return codename;
+	}
+	public void setCodename(String codename) {
+		this.codename = codename;
+	}
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getCoinname() {
-		return coinname;
-	}
-	public void setCoinname(String coinname) {
-		this.coinname = coinname;
-	}
-	public String getCoin() {
-		return coin;
-	}
-	public void setCoin(String coin) {
-		this.coin = coin;
-	}
-	public String getExchangerate() {
-		return exchangerate;
-	}
-	public void setExchangerate(String exchangerate) {
-		this.exchangerate = exchangerate;
-	}
-	public String getUpdated() {
-		return updated;
-	}
-	public void setUpdated(String updated) {
-		this.updated = updated;
-	}
-	public String getUpdatedISO() {
-		return updatedISO;
-	}
-	public void setUpdatedISO(String updatedISO) {
-		this.updatedISO = updatedISO;
-	}
-	public String getUpdateduk() {
-		return updateduk;
-	}
-	public void setUpdateduk(String updateduk) {
-		this.updateduk = updateduk;
-	}
-	public String getDiscllaimer() {
-		return discllaimer;
-	}
-	public void setDiscllaimer(String discllaimer) {
-		this.discllaimer = discllaimer;
-	}
-	public String getChartName() {
-		return chartName;
-	}
-	public void setChartName(String chartName) {
-		this.chartName = chartName;
-	}
+	
+//	public String getCoinname() {
+//		return coinname;
+//	}
+//	public void setCoinname(String coinname) {
+//		this.coinname = coinname;
+//	}
+//	public String getCoin() {
+//		return coin;
+//	}
+//	public void setCoin(String coin) {
+//		this.coin = coin;
+//	}
+//	public String getExchangerate() {
+//		return exchangerate;
+//	}
+//	public void setExchangerate(String exchangerate) {
+//		this.exchangerate = exchangerate;
+//	}
+//	public String getUpdated() {
+//		return updated;
+//	}
+//	public void setUpdated(String updated) {
+//		this.updated = updated;
+//	}
+//	public String getUpdatedISO() {
+//		return updatedISO;
+//	}
+//	public void setUpdatedISO(String updatedISO) {
+//		this.updatedISO = updatedISO;
+//	}
+//	public String getUpdateduk() {
+//		return updateduk;
+//	}
+//	public void setUpdateduk(String updateduk) {
+//		this.updateduk = updateduk;
+//	}
+//	public String getDiscllaimer() {
+//		return discllaimer;
+//	}
+//	public void setDiscllaimer(String discllaimer) {
+//		this.discllaimer = discllaimer;
+//	}
+//	public String getChartName() {
+//		return chartName;
+//	}
+//	public void setChartName(String chartName) {
+//		this.chartName = chartName;
+//	}
 	public String getDescription() {
 		return description;
 	}

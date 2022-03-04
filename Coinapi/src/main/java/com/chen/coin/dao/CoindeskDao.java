@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import com.chen.coin.entity.Coindesk;
 
 
-public interface CoindeskDao extends CrudRepository<Coindesk, Integer>{
+public interface CoindeskDao extends CrudRepository<Coindesk, String>{
 
 }
