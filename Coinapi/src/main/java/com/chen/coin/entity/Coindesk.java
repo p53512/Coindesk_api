@@ -52,7 +52,7 @@ public class Coindesk {
 	@Column
 	String description;
 	@Column
-	String rate_float;
+	double rate_float;
 	
 	public String getCode() {
 		return code;
@@ -134,10 +134,10 @@ public class Coindesk {
 	public void setRate(String rate) {
 		this.rate = rate;
 	}
-	public String getRate_float() {
+	public double getRate_float() {
 		return rate_float;
 	}
-	public void setRate_float(String rate_float) {
+	public void setRate_float(double rate_float) {
 		this.rate_float = rate_float;
 	}
 	

@@ -1,5 +1,6 @@
 package com.chen.coin.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,6 @@ public class CoindeskService {
 	 }
 
 	 public Coindesk save(Coindesk coin) {
-		 
 		 Coindesk rescoin =  coindeskDao.save(coin);
 		 return rescoin;
 	 }
@@ -31,19 +31,15 @@ public class CoindeskService {
 	 public Coindesk updateTodo(String coin,Coindesk coindesk) {
 	        try {
 	        	Coindesk resCoindesk = findById(coin);
-//	            Integer status = coindesk.getStatus();
-//	            resCoindesk.setStatus(stastus);
+	        	BeanUtils.copyProperties(coindesk, resCoindesk);
 	            return coindeskDao.save(resCoindesk);
 	        }catch (Exception exception) {
 	            return null;
 	        }
 
 	    }
-	 
-
 	 public Boolean deleteTodo(String coin) {
 	     try {
-	    	 Coindesk resCoindesk = findById(coin);
 	    	 coindeskDao.deleteById(coin);
 	            return true;
 	        } catch (Exception exception) {

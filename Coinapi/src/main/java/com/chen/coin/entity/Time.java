@@ -1,5 +1,7 @@
 package com.chen.coin.entity;
 
+import java.util.Date;
+
 public class Time {
 	String updated;
 	String updatedISO;
