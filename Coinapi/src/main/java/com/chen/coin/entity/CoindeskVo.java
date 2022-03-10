@@ -1,6 +1,5 @@
 package com.chen.coin.entity;
 
-import java.util.Map;
 
 public class CoindeskVo {
 
@@ -8,9 +7,17 @@ public class CoindeskVo {
 	String disclaimer;
 	String chartName;
 	Bpi bpi;
-
+	Coindesk coindesk;
 	public Time getTime() {
 		return time;
+	}
+
+	public Coindesk getCoindesk() {
+		return coindesk;
+	}
+
+	public void setCoindesk(Coindesk coindesk) {
+		this.coindesk = coindesk;
 	}
 
 	public void setTime(Time time) {
