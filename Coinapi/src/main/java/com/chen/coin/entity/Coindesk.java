@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 
 @Entity
 @Table
@@ -40,17 +42,17 @@ public class Coindesk {
 //	String rate_float;
 	
 	@Id
-	String code;
+	private String code;
 	@Column
-	String codename;
+	private String codename;
 	@Column
-	String symbol;
+	private String symbol;
 	@Column
-	String rate;
+	private String rate;
 	@Column
-	String description;
+	private String description;
 	@Column
-	double rate_float;
+	private double rate_float;
 	
 	public String getCode() {
 		return code;

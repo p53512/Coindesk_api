@@ -8,6 +8,7 @@ class CoinapiApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("測試測試");
 	}
 
 }

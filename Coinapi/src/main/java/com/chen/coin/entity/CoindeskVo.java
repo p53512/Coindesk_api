@@ -3,11 +3,12 @@ package com.chen.coin.entity;
 
 public class CoindeskVo {
 
-	Time time;
-	String disclaimer;
-	String chartName;
-	Bpi bpi;
-	Coindesk coindesk;
+	private Time time;
+	private String disclaimer;
+	private String chartName;
+	private Bpi bpi;
+	private Coindesk coindesk;
+	
 	public Time getTime() {
 		return time;
 	}

@@ -1,11 +1,10 @@
 package com.chen.coin.entity;
 
-import java.util.Date;
 
 public class Time {
-	String updated;
-	String updatedISO;
-	String updateduk;
+	private String updated;
+	private String updatedISO;
+	private String updateduk;
 
 	public String getUpdated() {
 		return updated;

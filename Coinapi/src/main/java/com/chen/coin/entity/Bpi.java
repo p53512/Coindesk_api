@@ -1,9 +1,9 @@
 package com.chen.coin.entity;
 
 public class Bpi {
-	Money USD;
-	Money GBP;
-	Money EUR;
+	private Money USD;
+	private Money GBP;
+	private Money EUR;
 
 	public Money getUSD() {
 		return USD;

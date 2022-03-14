@@ -1,11 +1,11 @@
 package com.chen.coin.entity;
 
 public class Money {
-	String code;
-	String symbol;
-	String rate;
-	String description;
-	String rate_float;
+	private String code;
+	private String symbol;
+	private String rate;
+	private String description;
+	private String rate_float;
 
 	public String getCode() {
 		return code;

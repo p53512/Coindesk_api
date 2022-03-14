@@ -6,12 +6,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,14 +33,16 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 @RestController
+@RequestMapping("/api")
 public class CoindeskController {
 
 	@Autowired
 	CoindeskService coindeskService;
 
-	public static JSONObject callCoindesk() throws JSONException {
+	@GetMapping("/callCoindesk")
+	public static JSONObject callCoindesk(@PathVariable String uri) throws JSONException {
 		RestTemplate restTemplate = new RestTemplate();
-		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
+		String str = restTemplate.getForObject(uri, String.class);
 		JSONObject json = JSONObject.fromObject(str);
 		
 		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
@@ -42,9 +51,10 @@ public class CoindeskController {
 		return json;
 	}
 
-	public List<Coindesk> turnCoinAPi() {
+	@GetMapping("/turnCoinAPi")
+	public List<Coindesk> turnCoinAPi(@PathVariable String uri) {
 		List<Coindesk> list = new ArrayList<Coindesk>();
-		JSONObject json = callCoindesk();
+		JSONObject json = callCoindesk(uri);
 		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
 		Time time = turnTime(vo.getTime());
 		vo.setTime(time);
@@ -52,31 +62,30 @@ public class CoindeskController {
 		coindeskService.findById(vo.getBpi().getGBP().getCode());
 		coindeskService.findById(vo.getBpi().getUSD().getCode());
 		
-		list.add(coindeskService.findById(vo.getBpi().getEUR().getCode()));
-		list.add(coindeskService.findById(vo.getBpi().getGBP().getCode()));
-		list.add(coindeskService.findById(vo.getBpi().getUSD().getCode()));
 		return null;
 	}
 
-	@GetMapping("/todos")
-	public Iterable<Coindesk> getTodoList() throws Exception {
+	@GetMapping("/getCoindesk")
+	public ResponseEntity  getCoindesk() throws Exception {
 		Iterable<Coindesk> coinList = coindeskService.getcoindes();
-		return coinList;
+		return ResponseEntity.status(HttpStatus.OK).body(coinList);
 	}
 
+	@GetMapping("/getCoindesk/{id}")
+	public Optional<Coindesk> getCoindesk(@PathVariable String id) throws Exception {
+		Optional<Coindesk> coinList = coindeskService.findById(id);
+		return coinList;
+	}
 	public static void main(String[] args) throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
 		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
-		JSONObject json = callCoindesk();
+		JSONObject json = callCoindesk(str);
 		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
-		
 		Time time = turnTime(vo.getTime());
 		
 	}
-
-	public void saveCoin() {
-		JSONObject json = callCoindesk();
-		CoindeskVo apivo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
+	@PostMapping("/saveCoindesk")
+	public ResponseEntity saveCoin(@RequestBody CoindeskVo apivo) {
 		Coindesk vo = new Coindesk();
 		vo.setCode(apivo.getBpi().getEUR().getCode());
 		vo.setCodename("歐元");
@@ -85,18 +94,28 @@ public class CoindeskController {
 		double rate_float = Double.valueOf(apivo.getBpi().getEUR().getRate_float());
 		vo.setRate_float(rate_float);
 		vo.setSymbol(apivo.getBpi().getEUR().getSymbol());
-		coindeskService.save(vo);
-		
+		Coindesk rescoin = coindeskService.save(vo);
+		return ResponseEntity.status(HttpStatus.OK).body(rescoin);
 	}
 
-	@PutMapping("/todos/{id}")
-	public void upadteTodo(String coin, Coindesk coindesk) {
-		coindeskService.updateTodo(coin, coindesk);
+	@PutMapping("/updateCoindesk/{id}")
+	public ResponseEntity upadteCoindesk(@PathVariable String coin,@RequestBody Coindesk coindesk) {
+		Coindesk rescoin = null;
+		try {
+			rescoin = coindeskService.updateCoin(coin ,coindesk);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return ResponseEntity.status(HttpStatus.OK).body(rescoin);
 	}
 
-	@DeleteMapping("/todos/{id}")
-	public void deleteTodo(String coin) {
-		coindeskService.deleteTodo(coin);
+	@DeleteMapping("/{id}")
+	public ResponseEntity  deleteTodo(@PathVariable String coin) {
+		 Boolean rlt = coindeskService.deleteTodo(coin);
+		 if (!rlt) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id 不存在");
+	        }
+	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
 	}
 
 	private static Time turnTime(Time vo) {
