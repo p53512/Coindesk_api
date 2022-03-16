@@ -3,7 +3,7 @@ package com.chen.coin;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +41,7 @@ public class TestCoindeskController {
 	    todoObject.put("description", "United States Dollar");
 
 	    // [Act] 模擬網路呼叫[POST] /api/todos
-	    String actualId = mockMvc.perform(MockMvcRequestBuilders.post("/api/todos")
+	    String actualId = mockMvc.perform(MockMvcRequestBuilders.post("/api/saveCoindesk")
 	            .accept(MediaType.APPLICATION_JSON) //response 設定型別
 	            .contentType(MediaType.APPLICATION_JSON) // request 設定型別
 	            .content(String.valueOf(todoObject))) // body 內容

@@ -85,15 +85,14 @@ public class CoindeskController {
 		
 	}
 	@PostMapping("/saveCoindesk")
-	public ResponseEntity saveCoin(@RequestBody CoindeskVo apivo) {
+	public ResponseEntity saveCoin(@RequestBody Coindesk coindesk) {
 		Coindesk vo = new Coindesk();
-		vo.setCode(apivo.getBpi().getEUR().getCode());
-		vo.setCodename("歐元");
-		vo.setDescription(apivo.getBpi().getEUR().getDescription());
-		vo.setRate(apivo.getBpi().getEUR().getRate());
-		double rate_float = Double.valueOf(apivo.getBpi().getEUR().getRate_float());
-		vo.setRate_float(rate_float);
-		vo.setSymbol(apivo.getBpi().getEUR().getSymbol());
+		vo.setCode(coindesk.getCode());
+		vo.setCodename(coindesk.getCodename());
+		vo.setDescription(coindesk.getDescription());
+		vo.setRate(coindesk.getRate());
+		vo.setRate_float(coindesk.getRate_float());
+		vo.setSymbol(coindesk.getSymbol());
 		Coindesk rescoin = coindeskService.save(vo);
 		return ResponseEntity.status(HttpStatus.OK).body(rescoin);
 	}
