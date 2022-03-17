@@ -30,6 +30,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<version>2.1.210</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -76,6 +77,8 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.4</version>
 		</dependency>
+
+
 	</dependencies>
 
 

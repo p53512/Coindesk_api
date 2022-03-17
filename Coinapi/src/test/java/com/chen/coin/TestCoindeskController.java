@@ -1,17 +1,12 @@
 package com.chen.coin;
 
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-<<<<<<< HEAD
 import org.junit.jupiter.api.Test;
-=======
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
->>>>>>> 429ca84a2901a14e8a1f5ae16bf2084ec3814c53
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.chen.coin.entity.Coindesk;
 import com.chen.coin.service.CoindeskService;
@@ -40,6 +37,7 @@ public class TestCoindeskController {
 	ObjectMapper objectMapper;
 	
 	@Test
+	@Transactional
 	public void testCreateCoin() throws Exception {
 	    // [Arrange] 預期回傳的值
 	    JSONObject coinObject = new JSONObject();
@@ -51,60 +49,75 @@ public class TestCoindeskController {
 	    coinObject.put("description", "United States Dollar");
 
 	    // [Act] 模擬網路呼叫[POST] /api/todos
-	    String actualId = mockMvc.perform(MockMvcRequestBuilders.post("/api/saveCoindesk")
+//	    String returnString = mockMvc.perform(MockMvcRequestBuilders.post("/api/saveCoindesk")
+//	            .accept(MediaType.APPLICATION_JSON) //response 設定型別
+//	            .contentType(MediaType.APPLICATION_JSON) // request 設定型別
+//	            .content(String.valueOf(coinObject))) // body 內容
+//	            .andExpect(status().isCreated()) // 預期回應的status code 為 201(Created)
+//	            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+	    
+	    mockMvc.perform(MockMvcRequestBuilders.post("/api/saveCoindesk")
 	            .accept(MediaType.APPLICATION_JSON) //response 設定型別
 	            .contentType(MediaType.APPLICATION_JSON) // request 設定型別
 	            .content(String.valueOf(coinObject))) // body 內容
 	            .andExpect(status().isCreated()) // 預期回應的status code 為 201(Created)
-	            .andReturn().getResponse().getContentAsString();
-
-	    // [Assert] 判定回傳的body是否跟預期的一樣
-	    assertEquals(2,  Integer.parseInt(actualId));
-	}
-	
-	@Test
-	public void testGetCoin() throws Exception {
-
-	    // [Arrange] 預期回傳的值
+	            .andDo(MockMvcResultHandlers.print());
+	    
 	    List<Coindesk> expectedList = new ArrayList<Coindesk>();
-	    Coindesk coin = new Coindesk();
-	    coin.setCode("USD");;
-	    coin.setCodename("美元");
-	    coin.setDescription("&#36;");
-	    coin.setRate("40,927.7733");
-	    coin.setRate_float(40927.7733);
-	    coin.setSymbol("&#36;");
-	    expectedList.add(coin);
-
-	    // [Act] 模擬網路呼叫[GET] /api/todos
-	    String returnString = mockMvc.perform(MockMvcRequestBuilders.get("/api/getCoindesk")
-	            .accept(MediaType.APPLICATION_JSON ))
-	            .andExpect(status().isOk())
-	            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-
-	    Iterable<Coindesk> actualList = objectMapper.readValue(returnString, new TypeReference<Iterable<Coindesk>>() {
-	    });
-	    // [Assert] 判定回傳的body是否跟預期的一樣
-	    assertEquals(expectedList,  actualList);
+	    Coindesk expectedcoin = new Coindesk();
+	    expectedcoin.setCode("USD");;
+	    expectedcoin.setCodename("美元");
+	    expectedcoin.setDescription("United States Dollar");
+	    expectedcoin.setRate("40,927.7733");
+	    expectedcoin.setRate_float(40927.7733);
+	    expectedcoin.setSymbol("&#36;");
+	    expectedList.add(expectedcoin);
+	    
 	}
 	
-	@Test
-	public void testUpdateTodoSuccess() throws Exception {
-	    JSONObject todoObject = new JSONObject();
-	    todoObject.put("status", 2);
-
-	    // [Act] 模擬網路呼叫[PUT] /api/todos/{id}
-	    mockMvc.perform(MockMvcRequestBuilders.put("/api/todos/1")
-	            .contentType(MediaType.APPLICATION_JSON) // request 設定型別
-	            .content(String.valueOf(todoObject))) // body 內容
-	            .andExpect(status().isOk()); // [Assert] 預期回應的status code 為 200(OK)
-	}
+//	@Test
+//	public void testGetCoin() throws Exception {
+//
+//	    // [Arrange] 預期回傳的值
+//	    List<Coindesk> expectedList = new ArrayList<Coindesk>();
+//	    Coindesk coin = new Coindesk();
+//	    coin.setCode("USD");;
+//	    coin.setCodename("美元");
+//	    coin.setDescription("&#36;");
+//	    coin.setRate("40,927.7733");
+//	    coin.setRate_float(40927.7733);
+//	    coin.setSymbol("&#36;");
+//	    expectedList.add(coin);
+//
+//	    // [Act] 模擬網路呼叫[GET] /api/todos
+//	    String returnString = mockMvc.perform(MockMvcRequestBuilders.get("/api/getCoindesk")
+//	            .accept(MediaType.APPLICATION_JSON ))
+//	            .andExpect(status().isOk())
+//	            .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+//
+//	    Iterable<Coindesk> actualList = objectMapper.readValue(returnString, new TypeReference<Iterable<Coindesk>>() {
+//	    });
+//	    // [Assert] 判定回傳的body是否跟預期的一樣
+//	    assertEquals(expectedList,  actualList);
+//	}
+//	
+//	@Test
+//	public void testUpdateTodoSuccess() throws Exception {
+//	    JSONObject todoObject = new JSONObject();
+//	    todoObject.put("status", 2);
+//
+//	    // [Act] 模擬網路呼叫[PUT] /api/todos/{id}
+//	    mockMvc.perform(MockMvcRequestBuilders.put("/api/todos/1")
+//	            .contentType(MediaType.APPLICATION_JSON) // request 設定型別
+//	            .content(String.valueOf(todoObject))) // body 內容
+//	            .andExpect(status().isOk()); // [Assert] 預期回應的status code 為 200(OK)
+//	}
 	
-	@Test
-	public void testDeleteTodoSuccess() throws Exception {
-	    // [Act] 模擬網路呼叫[DELETE] /api/todos/{id}
-	    mockMvc.perform(MockMvcRequestBuilders.delete("/api/todos/1")
-	            .contentType(MediaType.APPLICATION_JSON)) // request 設定型別
-	            .andExpect(status().isNoContent()); // [Assert] 預期回應的status code 為 204(No Content)
-	}
+//	@Test
+//	public void testDeleteTodoSuccess() throws Exception {
+//	    // [Act] 模擬網路呼叫[DELETE] /api/todos/{id}
+//	    mockMvc.perform(MockMvcRequestBuilders.delete("/api/todos/1")
+//	            .contentType(MediaType.APPLICATION_JSON)) // request 設定型別
+//	            .andExpect(status().isNoContent()); // [Assert] 預期回應的status code 為 204(No Content)
+//	}
 }

@@ -94,7 +94,7 @@ public class CoindeskController {
 		vo.setRate_float(coindesk.getRate_float());
 		vo.setSymbol(coindesk.getSymbol());
 		Coindesk rescoin = coindeskService.save(vo);
-		return ResponseEntity.status(HttpStatus.OK).body(rescoin);
+		return ResponseEntity.status(HttpStatus.CREATED).body(rescoin);
 	}
 
 	@PutMapping("/updateCoindesk/{id}")
