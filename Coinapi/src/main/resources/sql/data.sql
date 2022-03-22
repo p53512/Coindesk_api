@@ -1,0 +1,1 @@
+INSERT INTO Coindesk (CODE,CODENAME, SYMBOL, RATE,  RATE_FLOAT, DESCRIPTION) values ('USD', '美元', '&#36;', '40,927.7733', 40927.7733, 'United States Dollar' );

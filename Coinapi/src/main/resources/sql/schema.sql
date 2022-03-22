@@ -1,0 +1,8 @@
+ CREATE TABLE Coindesk (
+        CODE VARCHAR(30) PRIMARY KEY,
+        CODENAME VARCHAR(10),
+        SYMBOL  VARCHAR(30),
+        RATE_FLOAT DOUBLE,
+        RATE  VARCHAR(50),
+        DESCRIPTION VARCHAR(20)
+    );

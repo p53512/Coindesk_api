@@ -39,8 +39,8 @@ public class CoindeskController {
 	@Autowired
 	CoindeskService coindeskService;
 
-	@GetMapping("/callCoindesk")
-	public static JSONObject callCoindesk(@PathVariable String uri) throws JSONException {
+	@GetMapping("/callCoindesk/{uri}")
+	public JSONObject callCoindesk(@PathVariable String uri) throws JSONException {
 		RestTemplate restTemplate = new RestTemplate();
 		String str = restTemplate.getForObject(uri, String.class);
 		JSONObject json = JSONObject.fromObject(str);
@@ -76,14 +76,14 @@ public class CoindeskController {
 		Optional<Coindesk> coinList = coindeskService.findById(id);
 		return coinList;
 	}
-	public static void main(String[] args) throws Exception {
-		RestTemplate restTemplate = new RestTemplate();
-		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
-		JSONObject json = callCoindesk(str);
-		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
-		Time time = turnTime(vo.getTime());
-		
-	}
+//	public static void main(String[] args) throws Exception {
+//		RestTemplate restTemplate = new RestTemplate();
+//		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
+//		JSONObject json = callCoindesk(str);
+//		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
+//		Time time = turnTime(vo.getTime());
+//		
+//	}
 	@PostMapping("/saveCoindesk")
 	public ResponseEntity saveCoin(@RequestBody Coindesk coindesk) {
 		Coindesk vo = new Coindesk();
@@ -97,7 +97,7 @@ public class CoindeskController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(rescoin);
 	}
 
-	@PutMapping("/updateCoindesk/{id}")
+	@PutMapping("/updateCoindesk/{coin}")
 	public ResponseEntity upadteCoindesk(@PathVariable String coin,@RequestBody Coindesk coindesk) {
 		Coindesk rescoin = null;
 		try {
@@ -108,9 +108,9 @@ public class CoindeskController {
         return ResponseEntity.status(HttpStatus.OK).body(rescoin);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity  deleteTodo(@PathVariable String coin) {
-		 Boolean rlt = coindeskService.deleteTodo(coin);
+	@DeleteMapping("/deleteCoin/{id}")
+	public ResponseEntity  deleteCoin(@PathVariable String id) {
+		 Boolean rlt = coindeskService.deleteTodo(id);
 		 if (!rlt) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id 不存在");
 	        }
