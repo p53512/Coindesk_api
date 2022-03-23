@@ -18,3 +18,4 @@ CREATE TABLE Coindesk (<br>
 　RATE  VARCHAR(50),<br> 
 　DESCRIPTION VARCHAR(50)<br> 
 );<br> 
+
