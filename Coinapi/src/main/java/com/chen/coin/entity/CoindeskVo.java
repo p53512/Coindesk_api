@@ -7,18 +7,9 @@ public class CoindeskVo {
 	private String disclaimer;
 	private String chartName;
 	private Bpi bpi;
-	private Coindesk coindesk;
 	
 	public Time getTime() {
 		return time;
-	}
-
-	public Coindesk getCoindesk() {
-		return coindesk;
-	}
-
-	public void setCoindesk(Coindesk coindesk) {
-		this.coindesk = coindesk;
 	}
 
 	public void setTime(Time time) {

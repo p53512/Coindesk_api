@@ -1,5 +1,8 @@
 package com.chen.coin.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.chen.coin.entity.Bpi;
 import com.chen.coin.entity.Coindesk;
 import com.chen.coin.entity.CoindeskVo;
 import com.chen.coin.entity.Money;
 import com.chen.coin.entity.Time;
+import com.chen.coin.entity.Turndate;
 import com.chen.coin.service.CoindeskService;
 import com.sun.xml.bind.annotation.OverrideAnnotationOf;
 
@@ -39,34 +44,33 @@ public class CoindeskController {
 	@Autowired
 	CoindeskService coindeskService;
 
-	@GetMapping("/callCoindesk/{uri}")
-	public JSONObject callCoindesk(@PathVariable String uri) throws JSONException {
+	@GetMapping("/callCoindesk/{url}")
+	public ResponseEntity<JSONObject> callCoindesk(@PathVariable String url) throws JSONException, UnsupportedEncodingException {
+		String encodedURL = URLDecoder.decode(url, "UTF-8");
 		RestTemplate restTemplate = new RestTemplate();
-		String str = restTemplate.getForObject(uri, String.class);
+		String str = restTemplate.getForObject(encodedURL, String.class);
 		JSONObject json = JSONObject.fromObject(str);
-		
-		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
-		System.err.println(vo.getBpi().getEUR().getCode());
 
-		return json;
+		return ResponseEntity.status(HttpStatus.OK).body(json);
 	}
 
-	@GetMapping("/turnCoinAPi")
-	public List<Coindesk> turnCoinAPi(@PathVariable String uri) {
-		List<Coindesk> list = new ArrayList<Coindesk>();
-		JSONObject json = callCoindesk(uri);
+	@GetMapping("/turnCoinApi/{url}")  // B. 幣別相關資訊（幣別，幣別中文名稱，以及匯率）。
+	public ResponseEntity<Turndate> turnCoinAPi(@PathVariable String url) throws Exception {
+		String encodedURL = URLDecoder.decode(url, "UTF-8");
+		RestTemplate restTemplate = new RestTemplate();
+		String str = restTemplate.getForObject(encodedURL, String.class);
+		JSONObject json = JSONObject.fromObject(str);
 		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
 		Time time = turnTime(vo.getTime());
-		vo.setTime(time);
-		coindeskService.findById(vo.getBpi().getEUR().getCode());
-		coindeskService.findById(vo.getBpi().getGBP().getCode());
-		coindeskService.findById(vo.getBpi().getUSD().getCode());
 		
-		return null;
+		Turndate returnDate = turnCoin(vo);
+		returnDate.setTime(time);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(returnDate);
 	}
 
 	@GetMapping("/getCoindesk")
-	public ResponseEntity  getCoindesk() throws Exception {
+	public ResponseEntity getCoindesk() throws Exception {
 		Iterable<Coindesk> coinList = coindeskService.getcoindes();
 		return ResponseEntity.status(HttpStatus.OK).body(coinList);
 	}
@@ -76,14 +80,6 @@ public class CoindeskController {
 		Optional<Coindesk> coinList = coindeskService.findById(id);
 		return coinList;
 	}
-//	public static void main(String[] args) throws Exception {
-//		RestTemplate restTemplate = new RestTemplate();
-//		String str = restTemplate.getForObject("https://api.coindesk.com/v1/bpi/currentprice.json", String.class);
-//		JSONObject json = callCoindesk(str);
-//		CoindeskVo vo = (CoindeskVo) JSONObject.toBean(json, CoindeskVo.class);
-//		Time time = turnTime(vo.getTime());
-//		
-//	}
 	@PostMapping("/saveCoindesk")
 	public ResponseEntity saveCoin(@RequestBody Coindesk coindesk) {
 		Coindesk vo = new Coindesk();
@@ -98,7 +94,7 @@ public class CoindeskController {
 	}
 
 	@PutMapping("/updateCoindesk/{coin}")
-	public ResponseEntity upadteCoindesk(@PathVariable String coin,@RequestBody Coindesk coindesk) {
+	public ResponseEntity upadteCoindesk(@PathVariable(value="coin") String coin,@RequestBody Coindesk coindesk) {
 		Coindesk rescoin = null;
 		try {
 			rescoin = coindeskService.updateCoin(coin ,coindesk);
@@ -117,7 +113,7 @@ public class CoindeskController {
 	        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("");
 	}
 
-	private static Time turnTime(Time vo) {
+	private Time turnTime(Time vo) {
 		SimpleDateFormat ISOsdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		SimpleDateFormat UTCsdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.ENGLISH);
 		SimpleDateFormat UKsdf = new SimpleDateFormat("MMM dd, yyyy 'at' HH:mm", Locale.ENGLISH);
@@ -139,5 +135,46 @@ public class CoindeskController {
             e.printStackTrace();
         }
 		return vo;
+	}
+	private Turndate turnCoin(CoindeskVo vo) throws Exception {
+	Coindesk EURcoindesk = new Coindesk();
+	Coindesk GBPcoindesk = new Coindesk();
+	Coindesk USDcoindesk = new Coindesk();
+	
+	EURcoindesk.setRate(vo.getBpi().getEUR().getRate());
+	EURcoindesk.setRate_float( Double.valueOf(vo.getBpi().getEUR().getRate_float()));
+	GBPcoindesk.setRate(vo.getBpi().getGBP().getRate());
+	GBPcoindesk.setRate_float( Double.valueOf(vo.getBpi().getGBP().getRate_float()));
+	USDcoindesk.setRate(vo.getBpi().getUSD().getRate());
+	USDcoindesk.setRate_float( Double.valueOf(vo.getBpi().getUSD().getRate_float()));
+	
+	Coindesk EURrescoin = coindeskService.updateCoin(vo.getBpi().getEUR().getCode() ,EURcoindesk);
+	Coindesk GBPrescoin = coindeskService.updateCoin(vo.getBpi().getGBP().getCode() ,GBPcoindesk);
+	Coindesk USDrescoin = coindeskService.updateCoin(vo.getBpi().getUSD().getCode() ,USDcoindesk);
+	
+	Turndate returnDate = new Turndate();
+	Bpi bpi = new Bpi();
+	Money EUR = new Money();
+	Money GBP = new Money();
+	Money USD = new Money();
+	returnDate.setBpi(bpi);
+	returnDate.getBpi().setEUR(EUR);
+	returnDate.getBpi().setGBP(GBP);
+	returnDate.getBpi().setUSD(USD);
+	returnDate.getBpi().getEUR().setCode(EURrescoin.getCode());
+	returnDate.getBpi().getEUR().setCodename(EURrescoin.getCodename());
+	returnDate.getBpi().getEUR().setRate(EURrescoin.getRate());
+	returnDate.getBpi().getEUR().setRate_float(String.valueOf(EURrescoin.getRate_float()));
+	returnDate.getBpi().getGBP().setCode(GBPrescoin.getCode());
+	returnDate.getBpi().getGBP().setCodename(GBPrescoin.getCodename());
+	returnDate.getBpi().getGBP().setRate(GBPrescoin.getRate());
+	returnDate.getBpi().getGBP().setRate_float(String.valueOf(GBPrescoin.getRate_float()));
+	returnDate.getBpi().getUSD().setCode(USDrescoin.getCode());
+	returnDate.getBpi().getUSD().setCodename(USDrescoin.getCodename());
+	returnDate.getBpi().getUSD().setRate(USDrescoin.getRate());
+	returnDate.getBpi().getUSD().setRate_float(String.valueOf(USDrescoin.getRate_float()));
+	
+			
+	return returnDate;
 	}
 }

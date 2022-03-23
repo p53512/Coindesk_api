@@ -4,5 +4,5 @@
         SYMBOL  VARCHAR(30),
         RATE_FLOAT DOUBLE,
         RATE  VARCHAR(50),
-        DESCRIPTION VARCHAR(20)
+        DESCRIPTION VARCHAR(50)
     );

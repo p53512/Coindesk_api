@@ -1,1 +1,3 @@
 INSERT INTO Coindesk (CODE,CODENAME, SYMBOL, RATE,  RATE_FLOAT, DESCRIPTION) values ('USD', '美元', '&#36;', '40,927.7733', 40927.7733, 'United States Dollar' );
+INSERT INTO Coindesk (CODE,CODENAME, SYMBOL, RATE,  RATE_FLOAT, DESCRIPTION) values ('GBP', '英鎊', '&pound;', '31,719.4877', 31719.4877, 'British Pound Sterling' );
+INSERT INTO Coindesk (CODE,CODENAME, SYMBOL, RATE,  RATE_FLOAT, DESCRIPTION) values ('EUR', '歐元', '&euro;', '38,180.0556', 38180.0556, 'Euro' );
