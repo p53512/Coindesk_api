@@ -1,5 +1,6 @@
 # Coindesk_api
 建立 SQL 語法
+======================================================
  CREATE TABLE Coindesk (
         CODE VARCHAR(30) PRIMARY KEY,
         CODENAME VARCHAR(10),
