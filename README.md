@@ -10,11 +10,11 @@
 
 建立 SQL 語法 檔案路徑 /resources/sql/schema.sql
 ======================================================
->CREATE TABLE Coindesk (<br> 
->>CODE VARCHAR(30) PRIMARY KEY,<br> 
->>CODENAME VARCHAR(10),<br> 
->>SYMBOL  VARCHAR(30),<br> 
->> RATE_FLOAT DOUBLE,<br> 
->>RATE  VARCHAR(50),<br> 
->> DESCRIPTION VARCHAR(50)<br> 
+CREATE TABLE Coindesk (<br> 
+　CODE VARCHAR(30) PRIMARY KEY,<br> 
+　CODENAME VARCHAR(10),<br> 
+　SYMBOL  VARCHAR(30),<br> 
+　RATE_FLOAT DOUBLE,<br> 
+　RATE  VARCHAR(50),<br> 
+　DESCRIPTION VARCHAR(50)<br> 
 );<br> 
