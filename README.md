@@ -1,5 +1,4 @@
 # Coindesk_api 說明如下
-======================================================
 1.IntegrationTesting 為整合測試裡面包含規格書所要求6個api測試方法
 2.TestGetCoin 查詢所有幣別測試
 3.TestGetCoin 查詢單一幣別測試
